@@ -105,6 +105,7 @@ let testFailed = false;
 let resultSent = false;
 let testUserName = '';
 let testUserCNP = '';
+let isInFullscreen = false;
 
 const pageHome = document.getElementById('pageHome');
 const pageRules = document.getElementById('pageRules');
@@ -392,10 +393,6 @@ function startTest() {
   testFailed = false;
   resultSent = false;
 
-  requestFullscreenMode().catch(() => {
-    failTest('Full screen obligatoriu. Examen picat.');
-  });
-
   switchPage(pageTest);
   updateQuestion();
   resetTimer();
@@ -424,12 +421,13 @@ preTestNextBtn.addEventListener('click', () => {
   testUserName = name;
   testUserCNP = cnp;
   
-  // FORȚEAZĂ FULLSCREEN ÎN MOMENTUL ÎNCEPERII TESTULUI
+  // FORȚEAZĂ FULLSCREEN STRICT - NU PORNIM TESTUL DACĂ NU REUȘIM
   requestFullscreenMode().then(() => {
+    isInFullscreen = true;
     startTest();
-  }).catch(() => {
-    // Dacă fullscreen eșuează, totuși pornește testul
-    startTest();
+  }).catch((error) => {
+    console.error('Fullscreen eșuat:', error);
+    showAlert('Fullscreen este obligatoriu pentru a putea incepe testul. Te rog incearca din nou.');
   });
 });
 
@@ -461,6 +459,12 @@ document.addEventListener('keydown', (event) => {
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && pageTest.classList.contains('active')) {
     failTest('Tab-change detectat. Examen picat.');
+  }
+});
+
+document.addEventListener('fullscreenchange', () => {
+  if (!document.fullscreenElement && pageTest.classList.contains('active')) {
+    failTest('Full screen pierdut. Examen picat.');
   }
 });
 
