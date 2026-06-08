@@ -1,21 +1,96 @@
 const API_BASE = window.location.origin;
 
 const questionBank = [
-  { type: 'choice', question: 'Pe ce principiu se bazează toate evaluările și consilierile psihologice?', options: ['Respectarea confidențialității și a respectului reciproc', 'Respectarea ordinelor superiorilor indiferent de situație', 'Protejarea intereselor departamentului înaintea pacientului', 'Păstrarea informațiilor doar în cadrul conducerii'], correct: 0 },
-  { type: 'choice', question: 'Ce trebuie să facă un membru al departamentului dacă are un conflict intern?', options: ['Să se adreseze unui Director Adjunct SMURD', 'Să urmeze scara ierarhică a Departamentului de Psihologie', 'Să contacteze un Supervizor din HR', 'Să raporteze direct situația unui Director General'], correct: 1 },
-  { type: 'choice', question: 'Cine are responsabilitatea de a analiza problemele comportamentale ale colegilor sancționați?', options: ['Secretarii departamentului', 'Managerii SMURD', 'Supervizorii Psihologie', 'Directorii afacerilor partenere'], correct: 2 },
-  { type: 'choice', question: 'Care este suma maximă care poate fi solicitată pentru o ședință de terapie sau evaluare psihologică?', options: ['15.000$', '25.000$', '50.000$', '75.000$'], correct: 2 },
-  { type: 'choice', question: 'Ce sancțiune se aplică în mod normal pentru neîndeplinirea raportului săptămânal?', options: ['Suspendare temporară', 'Avertisment Verbal (AV)', 'Faction Warning (FW)', 'Retrogradare'], correct: 1 },
-  { type: 'choice', question: 'Cât timp trebuie păstrate înregistrările ședințelor psihologice?', options: ['24 de ore', '48 de ore', '72 de ore', '7 zile'], correct: 2 },
-  { type: 'choice', question: 'În cât timp trebuie prezentate dovezile solicitate de un superior?', options: ['12 ore', '24 ore', '48 ore', 'Până la sfârșitul săptămânii'], correct: 1 },
-  { type: 'choice', question: 'Ce se poate întâmpla dacă un psiholog nu poate prezenta dovezile unei ședințe atunci când acestea sunt solicitate?', options: ['Primește o atenționare verbală informală', 'Este sancționat cu AV', 'Pierde automat licența', 'Este obligat să refacă ședința'], correct: 1 },
-  { type: 'choice', question: 'Care este termenul de valabilitate al unei adeverințe psihologice?', options: ['7 zile', '10 zile', '14 zile (2 săptămâni)', '30 zile'], correct: 2 },
-  { type: 'choice', question: 'După cât timp poate fi reluată o ședință cu statusul „Picat”?', options: ['12 ore', '24 ore', '48 ore', '72 ore'], correct: 1 },
-  { type: 'choice', question: 'Ce condiție trebuie îndeplinită pentru ca un psiholog să poată susține o ședință psihologică?', options: ['Să fie minim gradul de Supervizor', 'Să dețină o licență activă', 'Să aibă minimum 3 rapoarte efectuate', 'Să fie aprobat de conducerea SMURD'], correct: 1 },
-  { type: 'choice', question: 'Ce sancțiune se aplică pentru utilizarea licenței unui alt psiholog?', options: ['AV', 'FW', 'Suspendare pe perioadă determinată', 'Demitere din departament'], correct: 3 },
-  { type: 'choice', question: 'În cazul unei intervenții pentru tentativă de suicid, pe ce frecvență trebuie mutată echipa medicală?', options: ['Frecvența 10', 'Frecvența 11', 'Frecvența 12', 'Frecvența 15'], correct: 2 },
-  { type: 'choice', question: 'Care este prima etapă a protocolului de intervenție psihologică în caz de tentativă de suicid?', options: ['Transportarea pacientului la spital', 'Evaluarea rapidă a situației', 'Completarea documentelor necesare', 'Solicitarea unei echipe de negociatori'], correct: 1 },
-  { type: 'choice', question: 'Care dintre următoarele comportamente este interzis în timpul unei intervenții suicidare?', options: ['Folosirea unui ton calm și empatic', 'Adresarea pacientului pe nume', 'Ridicarea vocii și folosirea unui ton autoritar', 'Încurajarea pacientului să vorbească despre situație'], correct: 2 }
+  { 
+    type: 'choice', 
+    question: 'Pe ce principiu se bazează toate evaluările și consilierile psihologice?', 
+    options: ['Respectarea confidențialității și a respectului reciproc', 'Respectarea ordinelor superiorilor indiferent de situație', 'Protejarea intereselor departamentului înaintea pacientului', 'Păstrarea informațiilor doar în cadrul conducerii'], 
+    correct: 0 
+  },
+  { 
+    type: 'choice', 
+    question: 'Ce trebuie să facă un membru al departamentului dacă are un conflict intern?', 
+    options: ['Să se adreseze unui Director Adjunct SMURD', 'Să urmeze scara ierarhică a Departamentului de Psihologie', 'Să contacteze un Supervizor din HR', 'Să raporteze direct situația unui Director General'], 
+    correct: 1 
+  },
+  { 
+    type: 'choice', 
+    question: 'Cine are responsabilitatea de a analiza problemele comportamentale ale colegilor sancționați?', 
+    options: ['Secretarii departamentului', 'Managerii SMURD', 'Supervizorii Psihologie', 'Directorii afacerilor partenere'], 
+    correct: 2 
+  },
+  { 
+    type: 'choice', 
+    question: 'Care este suma maximă care poate fi solicitată pentru o ședință de terapie sau evaluare psihologică?', 
+    options: ['15.000$', '25.000$', '50.000$', '75.000$'], 
+    correct: 2 
+  },
+  { 
+    type: 'choice', 
+    question: 'Ce sancțiune se aplică în mod normal pentru neîndeplinirea raportului săptămânal?', 
+    options: ['Suspendare temporară', 'Avertisment Verbal (AV)', 'Faction Warning (FW)', 'Retrogradare'], 
+    correct: 1 
+  },
+  { 
+    type: 'choice', 
+    question: 'Cât timp trebuie păstrate înregistrările ședințelor psihologice?', 
+    options: ['24 de ore', '48 de ore', '72 de ore', '7 zile'], 
+    correct: 2 
+  },
+  { 
+    type: 'choice', 
+    question: 'În cât timp trebuie prezentate dovezile solicitate de un superior?', 
+    options: ['12 ore', '24 ore', '48 ore', 'Până la sfârșitul săptămânii'], 
+    correct: 1 
+  },
+  { 
+    type: 'choice', 
+    question: 'Ce se poate întâmpla dacă un psiholog nu poate prezenta dovezile unei ședințe atunci când acestea sunt solicitate?', 
+    options: ['Primește o atenționare verbală informală', 'Este sancționat cu AV', 'Pierde automat licența', 'Este obligat să refacă ședința'], 
+    correct: 1 
+  },
+  { 
+    type: 'choice', 
+    question: 'Care este termenul de valabilitate al unei adeverințe psihologice?', 
+    options: ['7 zile', '10 zile', '14 zile (2 săptămâni)', '30 zile'], 
+    correct: 2 
+  },
+  { 
+    type: 'choice', 
+    question: 'După cât timp poate fi reluată o ședință cu statusul „Picat"?', 
+    options: ['12 ore', '24 ore', '48 ore', '72 ore'], 
+    correct: 1 
+  },
+  { 
+    type: 'choice', 
+    question: 'Ce condiție trebuie îndeplinită pentru ca un psiholog să poată susține o ședință psihologică?', 
+    options: ['Să fie minim gradul de Supervizor', 'Să dețină o licență activă', 'Să aibă minimum 3 rapoarte efectuate', 'Să fie aprobat de conducerea SMURD'], 
+    correct: 1 
+  },
+  { 
+    type: 'choice', 
+    question: 'Ce sancțiune se aplică pentru utilizarea licenței unui alt psiholog?', 
+    options: ['AV', 'FW', 'Suspendare pe perioadă determinată', 'Demitere din departament'], 
+    correct: 3 
+  },
+  { 
+    type: 'choice', 
+    question: 'În cazul unei intervenții pentru tentativă de suicid, pe ce frecvență trebuie mutată echipa medicală?', 
+    options: ['Frecvența 10', 'Frecvența 11', 'Frecvența 12', 'Frecvența 15'], 
+    correct: 2 
+  },
+  { 
+    type: 'choice', 
+    question: 'Care este prima etapă a protocolului de intervenție psihologică în caz de tentativă de suicid?', 
+    options: ['Transportarea pacientului la spital', 'Evaluarea rapidă a situației', 'Completarea documentelor necesare', 'Solicitarea unei echipe de negociatori'], 
+    correct: 1 
+  },
+  { 
+    type: 'choice', 
+    question: 'Care dintre următoarele comportamente este interzis în timpul unei intervenții suicidare?', 
+    options: ['Folosirea unui ton calm și empatic', 'Adresarea pacientului pe nume', 'Ridicarea vocii și folosirea unui ton autoritar', 'Încurajarea pacientului să vorbească despre situație'], 
+    correct: 2 
+  },
 ];
 
 const TOTAL_STEPS = 15;
@@ -84,6 +159,13 @@ function shuffle(array) {
 
 function buildQuestionSet() {
   return shuffle(questionBank).slice(0, 15);
+}
+
+function shuffleWithCorrect(options, correctIndex) {
+  const correctAnswer = options[correctIndex];
+  const shuffled = shuffle(options);
+  const newCorrectIndex = shuffled.indexOf(correctAnswer);
+  return { options: shuffled, correct: newCorrectIndex };
 }
 
 function updateTimerBar() {
@@ -221,7 +303,7 @@ function endTest(passed) {
   resultSent = true;
   clearInterval(timerInterval);
   const percentage = Math.round((score / 15) * 100);
-  const success = passed && percentage >= 70;
+  const success = passed && percentage >= 80;
 
   if (success) {
     resultTitle.textContent = 'Felicitari!';
@@ -293,6 +375,16 @@ function protectNavigation() {
 
 function startTest() {
   questions = buildQuestionSet();
+  
+  // Randomizează variantele pentru fiecare întrebare
+  questions = questions.map(q => {
+    if (q.type === 'choice') {
+      const { options, correct } = shuffleWithCorrect(q.options, q.correct);
+      return { ...q, options, correct };
+    }
+    return q;
+  });
+  
   currentQuestionIndex = 0;
   score = 0;
   selectedAnswerIndex = null;
