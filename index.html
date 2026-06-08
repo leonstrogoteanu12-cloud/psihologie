@@ -877,6 +877,175 @@ button:disabled {
 <script>
 const API_BASE = window.location.origin;
 
+// ===================== QUESTIONS DATABASE =====================
+const questions = [
+  {
+    id: 1,
+    question: "Pe ce principiu se bazează toate evaluările și consilierile psihologice?",
+    answers: [
+      "Respectarea confidențialității și a respectului reciproc",
+      "Respectarea ordinelor superiorilor indiferent de situație",
+      "Protejarea intereselor departamentului înaintea pacientului",
+      "Păstrarea informațiilor doar în cadrul conducerii"
+    ],
+    correctAnswer: 0
+  },
+  {
+    id: 2,
+    question: "Ce trebuie să facă un membru al departamentului dacă are un conflict intern?",
+    answers: [
+      "Să se adreseze unui Director Adjunct SMURD",
+      "Să urmeze scara ierarhică a Departamentului de Psihologie",
+      "Să contacteze un Supervizor din HR",
+      "Să raporteze direct situația unui Director General"
+    ],
+    correctAnswer: 1
+  },
+  {
+    id: 3,
+    question: "Cine are responsabilitatea de a analiza problemele comportamentale ale colegilor sancționați?",
+    answers: [
+      "Secretarii departamentului",
+      "Managerii SMURD",
+      "Supervizorii Psihologie",
+      "Directorii afacerilor partenere"
+    ],
+    correctAnswer: 2
+  },
+  {
+    id: 4,
+    question: "Care este suma maximă care poate fi solicitată pentru o ședință de terapie sau evaluare psihologică?",
+    answers: [
+      "15.000$",
+      "25.000$",
+      "50.000$",
+      "75.000$"
+    ],
+    correctAnswer: 2
+  },
+  {
+    id: 5,
+    question: "Ce sancțiune se aplică în mod normal pentru neîndeplinirea raportului săptămânal?",
+    answers: [
+      "Suspendare temporară",
+      "Avertisment Verbal (AV)",
+      "Faction Warning (FW)",
+      "Retrogradare"
+    ],
+    correctAnswer: 1
+  },
+  {
+    id: 6,
+    question: "Cât timp trebuie păstrate înregistrările ședințelor psihologice?",
+    answers: [
+      "24 de ore",
+      "48 de ore",
+      "72 de ore",
+      "7 zile"
+    ],
+    correctAnswer: 2
+  },
+  {
+    id: 7,
+    question: "În cât timp trebuie prezentate dovezile solicitate de un superior?",
+    answers: [
+      "12 ore",
+      "24 ore",
+      "48 ore",
+      "Până la sfârșitul săptămânii"
+    ],
+    correctAnswer: 1
+  },
+  {
+    id: 8,
+    question: "Ce se poate întâmpla dacă un psiholog nu poate prezenta dovezile unei ședințe atunci când acestea sunt solicitate?",
+    answers: [
+      "Primește o atenționare verbală informală",
+      "Este sancționat cu AV",
+      "Pierde automat licența",
+      "Este obligat să refacă ședința"
+    ],
+    correctAnswer: 1
+  },
+  {
+    id: 9,
+    question: "Care este termenul de valabilitate al unei adeverințe psihologice?",
+    answers: [
+      "7 zile",
+      "10 zile",
+      "14 zile (2 săptămâni)",
+      "30 zile"
+    ],
+    correctAnswer: 2
+  },
+  {
+    id: 10,
+    question: "După cât timp poate fi reluată o ședință cu statusul \"Picat\"?",
+    answers: [
+      "12 ore",
+      "24 ore",
+      "48 ore",
+      "72 ore"
+    ],
+    correctAnswer: 1
+  },
+  {
+    id: 11,
+    question: "Ce condiție trebuie îndeplinită pentru ca un psiholog să poată susține o ședință psihologică?",
+    answers: [
+      "Să fie minim gradul de Supervizor",
+      "Să dețină o licență activă",
+      "Să aibă minimum 3 rapoarte efectuate",
+      "Să fie aprobat de conducerea SMURD"
+    ],
+    correctAnswer: 1
+  },
+  {
+    id: 12,
+    question: "Ce sancțiune se aplică pentru utilizarea licenței unui alt psiholog?",
+    answers: [
+      "AV",
+      "FW",
+      "Suspendare pe perioadă determinată",
+      "Demitere din departament"
+    ],
+    correctAnswer: 3
+  },
+  {
+    id: 13,
+    question: "În cazul unei intervenții pentru tentativă de suicid, pe ce frecvență trebuie mutată echipa medicală?",
+    answers: [
+      "Frecvența 10",
+      "Frecvența 11",
+      "Frecvența 12",
+      "Frecvența 15"
+    ],
+    correctAnswer: 2
+  },
+  {
+    id: 14,
+    question: "Care este prima etapă a protocolului de intervenție psihologică în caz de tentativă de suicid?",
+    answers: [
+      "Transportarea pacientului la spital",
+      "Evaluarea rapidă a situației",
+      "Completarea documentelor necesare",
+      "Solicitarea unei echipe de negociatori"
+    ],
+    correctAnswer: 1
+  },
+  {
+    id: 15,
+    question: "Care dintre următoarele comportamente este interzis în timpul unei intervenții suicidare?",
+    answers: [
+      "Folosirea unui ton calm și empatic",
+      "Adresarea pacientului pe nume",
+      "Ridicarea vocii și folosirea unui ton autoritar",
+      "Încurajarea pacientului să vorbească despre situație"
+    ],
+    correctAnswer: 2
+  }
+];
+
 // ===================== RESULTS MANAGEMENT =====================
 function loadAndDisplayResults() {
   const grid = document.getElementById('resultsGrid');
@@ -999,387 +1168,215 @@ class AntiCheatSystem {
         this.logViolation('DEVTOOLS OPENED', 'critical');
         this.triggerTestFailure('DevTools detectat. Examen picat.');
       }
-    }, 200);
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'PrintScreen' && this.isTestRunning) {
-        e.preventDefault();
-        this.logViolation('PRINT SCREEN ATTEMPT', 'high');
-        this.triggerTestFailure('Screenshot detectat. Examen picat.');
-      }
-
-      const suspiciousShortcuts = { 'F12': true, 'F11': true };
-      if (suspiciousShortcuts[e.key]) {
-        e.preventDefault();
-        this.logViolation(`SHORTCUT BLOCKED: ${e.key}`, 'high');
-      }
-
-      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) {
-        e.preventDefault();
-        this.logViolation('DEVTOOLS SHORTCUT BLOCKED', 'high');
-      }
-    });
-
-    document.addEventListener('contextmenu', (e) => {
-      if (this.isTestRunning) {
-        e.preventDefault();
-        this.logViolation('RIGHT CLICK ATTEMPT', 'medium');
-      }
-    });
-
-    document.addEventListener('copy', (e) => {
-      if (this.isTestRunning) {
-        e.preventDefault();
-        this.logViolation('COPY ATTEMPT', 'medium');
-      }
-    });
-
-    document.addEventListener('paste', (e) => {
-      if (this.isTestRunning) {
-        e.preventDefault();
-        this.logViolation('PASTE ATTEMPT', 'medium');
-      }
-    });
-
-    window.addEventListener('blur', () => {
-      if (this.isTestRunning) {
-        this.logViolation('WINDOW BLUR', 'high');
-      }
-    });
-
-    this.setupCanvasProtection();
-    this.checkHeadless();
+    }, 500);
   }
 
-  setupCanvasProtection() {
-    const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
-    HTMLCanvasElement.prototype.toDataURL = function() {
-      if (antiCheat.isTestRunning) {
-        antiCheat.logViolation('CANVAS SCREENSHOT ATTEMPT', 'high');
-        return '';
-      }
-      return originalToDataURL.call(this);
-    };
-  }
-
-  checkHeadless() {
-    if (navigator.webdriver) {
-      this.logViolation('HEADLESS BROWSER DETECTED', 'critical');
-    }
-    if (!navigator.plugins.length) {
-      console.warn('Plugins not available - possible headless browser');
-    }
-  }
-
-  triggerTestFailure(reason) {
-    if (testFailed) return;
-    testFailed = true;
-    securityLock = true;
-    clearInterval(timerInterval);
-    this.sendCheatingReport(reason);
-    endTest(false);
-  }
-
-  sendCheatingReport(reason) {
-    fetch(`${API_BASE}/api/cheating-report`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_name: testUserName,
-        user_cnp: testUserCNP,
-        reason: reason,
-        violations: this.violations,
-        fingerprint: this.deviceFingerprint
-      })
-    }).catch(e => console.log('Report sent'));
-  }
-
-  enableTestMode() {
-    this.isTestRunning = true;
-    const monitor = document.getElementById('cheatMonitor');
-    if (monitor) monitor.style.display = 'block';
-  }
-
-  disableTestMode() {
+  triggerTestFailure(message) {
     this.isTestRunning = false;
-    const monitor = document.getElementById('cheatMonitor');
-    if (monitor) monitor.style.display = 'none';
+    showAlert(message);
+    showPage('pageResult');
+    document.getElementById('resultTitle').innerHTML = '❌ Examen Picat';
+    document.getElementById('resultMessage').innerHTML = message;
+    document.getElementById('resultScore').innerHTML = '0%';
   }
 }
 
+// ===================== GLOBAL STATE =====================
+let currentQuestion = 0;
+let userAnswers = [];
+let testStartTime = null;
+let testTimeLimit = 45;
+let timerInterval = null;
+let testName = '';
+let testCNP = '';
 const antiCheat = new AntiCheatSystem();
 
-// ===================== TEST SCRIPT =====================
-const questionBank = [
-  { type: 'choice', question: 'Pe ce principiu se bazează toate evaluările și consilierile psihologice?', options: ['Respectarea confidențialității și a respectului reciproc', 'Ignorarea regulilor', 'Judecata personală'], correct: 0 },
-  { type: 'choice', question: 'Ce trebuie să facă un membru al departamentului dacă are un conflict intern?', options: ['Să se adreseze unui superior', 'Să ignor problema', 'Să plece din departament'], correct: 0 },
-  { type: 'choice', question: 'Cine are responsabilitatea de a analiza problemele comportamentale?', options: ['Toti membrii', 'Managerii', 'Supervizorul'], correct: 2 },
-  { type: 'choice', question: 'Care este suma maximă pentru o ședință?', options: ['10.000$', '25.000$', '50.000$'], correct: 2 },
-  { type: 'choice', question: 'Ce sancțiune se aplică normal?', options: ['Avertisment', 'Suspendare', 'Demitere'], correct: 0 },
-  { type: 'choice', question: 'Cât timp se păstrează înregistrările?', options: ['24 ore', '48 ore', '72 ore'], correct: 2 },
-  { type: 'choice', question: 'În cât timp se prezintă dovezile?', options: ['12 ore', '24 ore', '48 ore'], correct: 1 },
-  { type: 'choice', question: 'Ce se întâmplă fără dovezi?', options: ['Avertisment', 'Nimic', 'Excludere'], correct: 0 },
-  { type: 'choice', question: 'Care este termenul adeverinței?', options: ['7 zile', '14 zile', '30 zile'], correct: 1 },
-  { type: 'choice', question: 'După cât timp se reia testul?', options: ['12 ore', '24 ore', '72 ore'], correct: 1 },
-  { type: 'choice', question: 'Ce condiție pentru ședință?', options: ['Grad minim', 'Experiență', 'Vârsta'], correct: 0 },
-  { type: 'choice', question: 'Sancțiune pentru folosire licență?', options: ['AV', 'FW', 'Demitere'], correct: 2 },
-  { type: 'choice', question: 'Frecvență pentru intervenție?', options: ['10', '11', '12'], correct: 1 },
-  { type: 'choice', question: 'Prima etapă de protocol?', options: ['Transport', 'Evaluare', 'Raport'], correct: 1 },
-  { type: 'choice', question: 'Ce comportament interzis?', options: ['Empatie', 'Furie', 'Neatenție'], correct: 2 }
-];
+// ===================== PAGE NAVIGATION =====================
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+}
 
-const TOTAL_STEPS = 15;
-let questions = [];
-let currentQuestionIndex = 0;
-let selectedAnswerIndex = null;
-let score = 0;
-let timerValue = 45;
-let timerInterval = null;
-let securityLock = false;
-let testFailed = false;
-let resultSent = false;
-let testUserName = '';
-let testUserCNP = '';
+// ===================== ALERT SYSTEM =====================
+function showAlert(message) {
+  const overlay = document.getElementById('alertOverlay');
+  const text = document.getElementById('alertText');
+  text.innerHTML = message;
+  overlay.classList.remove('hidden');
+  document.getElementById('closeAlertBtn').onclick = () => {
+    overlay.classList.add('hidden');
+  };
+}
 
-const pageHome = document.getElementById('pageHome');
-const pageRules = document.getElementById('pageRules');
-const pagePreTest = document.getElementById('pagePreTest');
-const pageTest = document.getElementById('pageTest');
-const pageResult = document.getElementById('pageResult');
-const startTestBtn = document.getElementById('startTestBtn');
-const confirmStartBtn = document.getElementById('confirmStartBtn');
-const cancelTestBtn = document.getElementById('cancelTestBtn');
-const preTestNextBtn = document.getElementById('preTestNextBtn');
-const preTestCancelBtn = document.getElementById('preTestCancelBtn');
-const preTestName = document.getElementById('preTestName');
-const preTestCNP = document.getElementById('preTestCNP');
-const nextBtn = document.getElementById('nextBtn');
-const retryBtn = document.getElementById('retryBtn');
-const questionTitle = document.getElementById('questionTitle');
-const answersContainer = document.getElementById('answers');
-const questionCounter = document.getElementById('questionCounter');
-const timerDisplay = document.getElementById('timer');
-const progressFill = document.getElementById('progressFill');
-const resultTitle = document.getElementById('resultTitle');
-const resultMessage = document.getElementById('resultMessage');
-const resultScore = document.getElementById('resultScore');
-const resultImage = document.getElementById('resultImage');
-const alertOverlay = document.getElementById('alertOverlay');
-const alertText = document.getElementById('alertText');
-const closeAlertBtn = document.getElementById('closeAlertBtn');
+// ===================== TEST LOGIC =====================
+function startTest() {
+  showPage('pageRules');
+}
 
-function exitFullscreenMode() {
-  if (document.fullscreenElement) {
-    if (document.exitFullscreen) {
-      document.exitFullscreen().catch(() => {});
-    } else if (document.webkitExitFullscreen) {
-      document.webkitExitFullscreen();
-    }
+function confirmTestStart() {
+  showPage('pagePreTest');
+}
+
+function preTestNext() {
+  const name = document.getElementById('preTestName').value.trim();
+  const cnp = document.getElementById('preTestCNP').value.trim();
+  
+  if (!name || !cnp) {
+    showAlert('Te rog completează toate câmpurile!');
+    return;
   }
+  
+  testName = name;
+  testCNP = cnp;
+  currentQuestion = 0;
+  userAnswers = [];
+  testStartTime = Date.now();
+  antiCheat.isTestRunning = true;
+  showPage('pageTest');
+  loadQuestion();
 }
 
-function switchPage(activePage) {
-  const leavingTest = !activePage.classList.contains('page-test');
-  if (leavingTest) {
-    exitFullscreenMode();
-  }
-
-  [pageHome, pageRules, pagePreTest, pageTest, pageResult].forEach(page => page.classList.remove('active'));
-  activePage.classList.add('active');
-}
-
-function shuffle(array) {
-  return array.slice().sort(() => Math.random() - 0.5);
-}
-
-function buildQuestionSet() {
-  return shuffle(questionBank).slice(0, 15);
-}
-
-function updateTimerBar() {
-  const progress = Math.max((timerValue / 45) * 100, 0);
-  progressFill.style.width = `${progress}%`;
-}
-
-function displayQuestion() {
-  if (currentQuestionIndex >= questions.length) {
-    endTest(true);
+function loadQuestion() {
+  if (currentQuestion >= questions.length) {
+    endTest();
     return;
   }
 
-  const question = questions[currentQuestionIndex];
-  questionTitle.textContent = question.question;
+  const q = questions[currentQuestion];
+  document.getElementById('questionTitle').innerHTML = q.question;
+  document.getElementById('questionCounter').innerHTML = `Pas ${currentQuestion + 1} / ${questions.length}`;
+  document.getElementById('progressFill').style.width = ((currentQuestion + 1) / questions.length * 100) + '%';
+  
+  const answersContainer = document.getElementById('answers');
   answersContainer.innerHTML = '';
-  selectedAnswerIndex = null;
-  nextBtn.disabled = true;
-
-  question.options.forEach((option, index) => {
-    const button = document.createElement('button');
-    button.className = 'answer-option';
-    button.textContent = option;
-    button.onclick = () => selectAnswer(index);
-    answersContainer.appendChild(button);
+  
+  q.answers.forEach((answer, idx) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-option';
+    btn.innerHTML = answer;
+    btn.onclick = () => selectAnswer(idx);
+    
+    if (userAnswers[currentQuestion] === idx) {
+      btn.classList.add('selected');
+    }
+    
+    answersContainer.appendChild(btn);
   });
 
-  updateTimerBar();
-  questionCounter.textContent = `Pas ${currentQuestionIndex + 1} / ${TOTAL_STEPS}`;
+  startTimer();
 }
 
-function selectAnswer(index) {
-  if (securityLock) return;
-
-  selectedAnswerIndex = index;
-  const options = document.querySelectorAll('.answer-option');
-  options.forEach((opt, i) => {
-    opt.classList.toggle('selected', i === index);
+function selectAnswer(idx) {
+  userAnswers[currentQuestion] = idx;
+  
+  const buttons = document.querySelectorAll('.answer-option');
+  buttons.forEach((btn, i) => {
+    btn.classList.toggle('selected', i === idx);
   });
-
-  nextBtn.disabled = false;
+  
+  document.getElementById('nextBtn').disabled = false;
 }
 
 function startTimer() {
-  timerValue = 45;
-  timerDisplay.textContent = '45s';
   clearInterval(timerInterval);
-
+  testTimeLimit = 45;
+  updateTimer();
+  
   timerInterval = setInterval(() => {
-    timerValue--;
-    timerDisplay.textContent = `${timerValue}s`;
-    updateTimerBar();
-
-    if (timerValue <= 0) {
+    testTimeLimit--;
+    updateTimer();
+    
+    if (testTimeLimit <= 0) {
       clearInterval(timerInterval);
-      moveToNextQuestion();
+      nextQuestion();
     }
   }, 1000);
 }
 
-function moveToNextQuestion() {
-  if (securityLock) return;
+function updateTimer() {
+  document.getElementById('timer').innerHTML = testTimeLimit + 's';
+  
+  if (testTimeLimit <= 10) {
+    document.getElementById('timer').style.color = '#ef4444';
+  } else {
+    document.getElementById('timer').style.color = 'var(--text)';
+  }
+}
 
-  if (selectedAnswerIndex !== null) {
-    const question = questions[currentQuestionIndex];
-    if (selectedAnswerIndex === question.correct) {
+function nextQuestion() {
+  clearInterval(timerInterval);
+  currentQuestion++;
+  document.getElementById('nextBtn').disabled = true;
+  
+  if (currentQuestion < questions.length) {
+    loadQuestion();
+  } else {
+    endTest();
+  }
+}
+
+function endTest() {
+  clearInterval(timerInterval);
+  antiCheat.isTestRunning = false;
+  
+  let score = 0;
+  userAnswers.forEach((answer, idx) => {
+    if (answer === questions[idx].correctAnswer) {
       score++;
     }
-  }
+  });
+  
+  const percentage = Math.round((score / questions.length) * 100);
+  const passed = percentage >= 70;
+  
+  const result = {
+    name: testName,
+    cnp: testCNP,
+    score: percentage,
+    passed: passed,
+    timestamp: new Date().toISOString()
+  };
+  
+  let results = JSON.parse(localStorage.getItem('testResults')) || [];
+  results.push(result);
+  localStorage.setItem('testResults', JSON.stringify(results));
+  
+  showResult(percentage, passed);
+}
 
-  currentQuestionIndex++;
-  clearInterval(timerInterval);
-
-  if (currentQuestionIndex >= questions.length) {
-    endTest(true);
+function showResult(percentage, passed) {
+  showPage('pageResult');
+  
+  if (passed) {
+    document.getElementById('resultTitle').innerHTML = '✅ Felicitări!';
+    document.getElementById('resultMessage').innerHTML = `Ai trecut cu succes testul departamentului! Punctajul tău este ${percentage}%.`;
   } else {
-    displayQuestion();
-    startTimer();
+    document.getElementById('resultTitle').innerHTML = '❌ Examen Picat';
+    document.getElementById('resultMessage').innerHTML = `Din păcate, nu ai obținut punctajul minim necesar. Ai obținut ${percentage}%. Punctajul minim este 70%.`;
   }
+  
+  document.getElementById('resultScore').innerHTML = percentage + '%';
+  loadAndDisplayResults();
 }
 
-function endTest(passed) {
-  antiCheat.disableTestMode();
-  clearInterval(timerInterval);
-  securityLock = true;
-
-  const percentage = Math.round((score / TOTAL_STEPS) * 100);
-  const passing = percentage >= 60;
-
-  resultTitle.textContent = passing ? '✅ Felicitări!' : '❌ Test Nereușit';
-  resultMessage.textContent = passing 
-    ? `Ai promovat testul cu ${percentage}%! Te-ai calificat pentru departament.`
-    : `Din păcate, ai picat testul cu ${percentage}%. Scor minim: 60%`;
-  resultScore.textContent = `${percentage}%`;
-
-  if (!resultSent && testUserName && testUserCNP) {
-    resultSent = true;
-    const result = {
-      name: testUserName,
-      cnp: testUserCNP,
-      score: percentage,
-      passed: passing,
-      timestamp: new Date().toISOString()
-    };
-
-    // Save to localStorage
-    const results = JSON.parse(localStorage.getItem('testResults')) || [];
-    results.push(result);
-    localStorage.setItem('testResults', JSON.stringify(results));
-
-    // Send to server
-    fetch(`${API_BASE}/api/test-result`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(result)
-    }).catch(e => console.log('Result sent'));
-  }
-
-  switchPage(pageResult);
+function cancelTest() {
+  showPage('pageHome');
 }
 
-// EVENT LISTENERS
-startTestBtn.addEventListener('click', () => {
-  switchPage(pageRules);
-});
-
-confirmStartBtn.addEventListener('click', () => {
-  switchPage(pagePreTest);
-});
-
-cancelTestBtn.addEventListener('click', () => {
-  switchPage(pageHome);
-});
-
-preTestNextBtn.addEventListener('click', () => {
-  const name = preTestName.value.trim();
-  const cnp = preTestCNP.value.trim();
-
-  if (!name || !cnp) {
-    alert('Completează toate câmpurile!');
-    return;
-  }
-
-  testUserName = name;
-  testUserCNP = cnp;
-
-  questions = buildQuestionSet();
-  currentQuestionIndex = 0;
-  score = 0;
-  selectedAnswerIndex = null;
-  testFailed = false;
-  resultSent = false;
-
-  antiCheat.enableTestMode();
-  switchPage(pageTest);
-
-  setTimeout(() => {
-    displayQuestion();
-    startTimer();
-  }, 100);
-});
-
-preTestCancelBtn.addEventListener('click', () => {
-  preTestName.value = '';
-  preTestCNP.value = '';
-  switchPage(pageHome);
-});
-
-nextBtn.addEventListener('click', moveToNextQuestion);
-
-retryBtn.addEventListener('click', () => {
-  preTestName.value = '';
-  preTestCNP.value = '';
-  antiCheat.disableTestMode();
+// ===================== EVENT LISTENERS =====================
+document.getElementById('startTestBtn').onclick = startTest;
+document.getElementById('confirmStartBtn').onclick = confirmTestStart;
+document.getElementById('cancelTestBtn').onclick = cancelTest;
+document.getElementById('preTestNextBtn').onclick = preTestNext;
+document.getElementById('preTestCancelBtn').onclick = cancelTest;
+document.getElementById('nextBtn').onclick = nextQuestion;
+document.getElementById('retryBtn').onclick = () => {
+  showPage('pageHome');
   loadAndDisplayResults();
-  switchPage(pageHome);
-});
+};
 
-closeAlertBtn.addEventListener('click', () => {
-  alertOverlay.classList.add('hidden');
-});
-
-// Load results on page load
-window.addEventListener('load', () => {
-  loadAndDisplayResults();
-});
+// ===================== INITIALIZE =====================
+loadAndDisplayResults();
 </script>
 </body>
 </html>
