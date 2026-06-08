@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Departamentul de Psihologie</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #09060f;
+  --surface: rgba(24, 18, 36, 0.92);
+  --surface-strong: rgba(35, 24, 58, 0.98);
+  --text: #f0ecff;
+  --text-muted: #b1ace0;
+  --accent: #8b59ff;
+  --accent-strong: #b973ff;
+  --border: rgba(255,255,255,0.08);
+  --shadow: 0 30px 90px rgba(20, 10, 50, 0.35);
+  --success: #10b981;
+  --danger: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: radial-gradient(circle at top left, rgba(138, 96, 255, 0.2), transparent 24%),
+              radial-gradient(circle at bottom right, rgba(110, 45, 255, 0.15), transparent 18%),
+              linear-gradient(180deg, #09060f 0%, #0f0b1c 100%);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.page {
+  display: none;
+  min-height: 100vh;
+  padding: 40px 24px;
+  position: relative;
+}
+
+.page.active {
+  display: block;
+}
+
+.hero-panel {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 34px;
+  backdrop-filter: blur(20px);
+  background: rgba(18, 12, 30, 0.82);
+  box-shadow: var(--shadow);
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(300px, 1fr);
+  gap: 28px;
+  align-items: start;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.hero-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.logo {
+  width: 92px;
+  height: 92px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  padding: 12px;
+  font-size: 3rem;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.hero-brand span {
+  display: block;
+  font-size: 14px;
+  color: var(--text-muted);
+}
+
+.hero-brand strong {
+  display: block;
+  margin-top: 2px;
+  font-size: 26px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-center h1 {
+  margin: 0;
+  font-size: clamp(3rem, 5vw, 5.8rem);
+  letter-spacing: -0.06em;
+  line-height: 0.95;
+}
+
+.hero-center p {
+  max-width: 680px;
+  margin: 24px 0 32px;
+  color: var(--text-muted);
+  font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.hero-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 24px;
+  border-radius: 32px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(16, 10, 28, 0.94);
+}
+
+.sidebar-header {
+  font-size: 0.95rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.sidebar-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.sidebar-card {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 18px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.sidebar-card:hover {
+  transform: translateY(-2px);
+  background: rgba(139, 89, 255, 0.12);
+  border-color: rgba(139, 89, 255, 0.35);
+}
+
+.sidebar-card .icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  background: rgba(139, 89, 255, 0.18);
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.sidebar-card strong {
+  display: block;
+  font-size: 1rem;
+  margin-bottom: 4px;
+}
+
+.sidebar-card span {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+button {
+  border: none;
+  border-radius: 18px;
+  padding: 18px 28px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  color: #fff;
+  box-shadow: 0 20px 40px rgba(139, 89, 255, 0.35);
+}
+
+.primary:hover:not(:disabled) {
+  box-shadow: 0 25px 50px rgba(139, 89, 255, 0.45);
+}
+
+.secondary {
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.secondary:hover:not(:disabled) {
+  background: rgba(255,255,255,0.1);
+}
+
+.decor-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(0deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+
+.card {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 32px;
+  border-radius: 32px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(14, 9, 24, 0.92);
+  box-shadow: var(--shadow);
+}
+
+.card h2 {
+  margin-top: 0;
+  font-size: 2rem;
+}
+
+.card p {
+  color: var(--text-muted);
+}
+
+.card ul {
+  margin: 24px 0;
+  padding-left: 20px;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+.card ul li {
+  margin-bottom: 14px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: rgba(139, 89, 255, 0.6);
+  background: rgba(255,255,255,0.08);
+  box-shadow: 0 0 0 4px rgba(139, 89, 255, 0.12);
+}
+
+.card-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 24px;
+}
+
+.topbar {
+  max-width: 860px;
+  margin: 0 auto 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px;
+  border-radius: 24px;
+  background: rgba(24, 16, 44, 0.95);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.topbar .timer,
+.topbar .info {
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.progress-wrap {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto 16px;
+  height: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.08);
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  transition: width 0.3s ease;
+}
+
+.result-image {
+  margin-bottom: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 320px;
+}
+
+.result-image:empty {
+  display: none;
+  min-height: 0;
+  margin-bottom: 0;
+}
+
+.result-image img {
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  max-height: 280px;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(139, 89, 255, 0.2);
+}
+
+.result-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.question-card {
+  margin: 0 auto;
+  max-width: 860px;
+}
+
+.question-card h2 {
+  font-size: 1.85rem;
+}
+
+.answers {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.answer-input {
+  width: 100%;
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  font-size: 1rem;
+}
+
+.answer-input:focus {
+  outline: none;
+  border-color: rgba(139, 89, 255, 0.6);
+  box-shadow: 0 0 0 4px rgba(139, 89, 255, 0.12);
+}
+
+.answer-option {
+  padding: 20px 22px;
+  border-radius: 22px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.23s ease, background 0.23s ease, border-color 0.23s ease;
+}
+
+.answer-option:hover {
+  transform: translateY(-1px);
+  background: rgba(139, 89, 255, 0.12);
+}
+
+.answer-option.selected {
+  background: rgba(255, 223, 79, 0.18);
+  border-color: rgba(255, 223, 79, 0.4);
+}
+
+.answer-option.locked {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  max-width: 860px;
+  margin: 24px auto 0;
+}
+
+.result-card {
+  max-width: 720px;
+  text-align: center;
+}
+
+.result-card p {
+  color: var(--text-muted);
+  margin: 20px 0 28px;
+  line-height: 1.75;
+}
+
+.score-panel {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.08);
+  margin: 20px 0;
+}
+
+#resultScore {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 4, 14, 0.9);
+  display: grid;
+  place-items: center;
+  z-index: 20;
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-card {
+  width: min(640px, calc(100vw - 40px));
+  padding: 32px;
+  border-radius: 28px;
+  background: rgba(20, 12, 42, 0.96);
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: var(--shadow);
+}
+
+.overlay-card h3 {
+  margin-top: 0;
+  font-size: 1.5rem;
+}
+
+.anti-cheat-monitor {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 12px;
+  color: #00FF00;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: 1px solid #00FF00;
+  z-index: 999;
+  display: none;
+  font-family: monospace;
+  max-width: 200px;
+}
+
+/* ====== RESULTS TABLE STYLES ====== */
+.results-section {
+  max-width: 1200px;
+  margin: 40px auto 0;
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: 34px;
+  backdrop-filter: blur(20px);
+  background: rgba(18, 12, 30, 0.82);
+  box-shadow: var(--shadow);
+}
+
+.results-section h2 {
+  margin-top: 0;
+  font-size: 2rem;
+  margin-bottom: 28px;
+  color: var(--text);
+}
+
+.results-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.result-row {
+  display: grid;
+  grid-template-columns: 2fr 1.5fr 1fr 1fr;
+  gap: 16px;
+  padding: 18px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.04);
+  align-items: center;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.result-row:hover {
+  transform: translateY(-2px);
+  background: rgba(139, 89, 255, 0.08);
+  border-color: rgba(139, 89, 255, 0.25);
+}
+
+.result-row.header {
+  background: rgba(139, 89, 255, 0.15);
+  border: 1px solid rgba(139, 89, 255, 0.3);
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--accent-strong);
+  padding: 16px 20px;
+}
+
+.result-row.header:hover {
+  transform: none;
+  background: rgba(139, 89, 255, 0.15);
+}
+
+.result-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.result-cell.name {
+  color: var(--text);
+  font-weight: 500;
+  grid-column: 1;
+}
+
+.result-cell.cnp {
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.result-cell.status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status-badge.passed {
+  background: rgba(16, 185, 129, 0.2);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-badge.failed {
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.result-cell.score {
+  text-align: right;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+}
+
+.empty-state p {
+  margin: 0;
+  font-size: 1.05rem;
+}
+
+@media (max-width: 900px) {
+  .hero-panel, .card, .topbar, .results-section {
+    padding: 24px;
+  }
+
+  .hero-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-center p {
+    font-size: 1rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .card ul {
+    padding-left: 18px;
+    font-size: 0.95rem;
+  }
+
+  button {
+    width: 100%;
+  }
+
+  .result-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .result-row.header {
+    display: none;
+  }
+
+  .result-cell {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 8px;
+  }
+
+  .result-cell::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--accent);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  .result-cell.name::before {
+    content: 'Nume';
+  }
+
+  .result-cell.cnp::before {
+    content: 'CNP';
+  }
+
+  .result-cell.status::before {
+    content: 'Status';
+  }
+
+  .result-cell.score::before {
+    content: 'Scor';
+  }
+}
+
+@media (max-width: 640px) {
+  .page {
+    padding: 20px 16px;
+  }
+
+  .hero-center h1 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  button {
+    padding: 14px 20px;
+    font-size: 0.95rem;
+  }
+
+  .card-actions {
+    flex-direction: column;
+  }
+
+  .results-section {
+    padding: 20px;
+    margin-top: 20px;
+  }
+
+  .results-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+}
+</style>
+</head>
+<body>
+  <div class="page page-home active" id="pageHome">
+    <div class="hero-panel">
+      <div class="hero-content">
+        <div class="hero-left">
+          <img src="psihologie.png" alt="Logo Psihologie" class="logo" />
+          <div class="hero-brand">
+            <span>Departamentul de</span>
+            <strong>Psihologie</strong>
+          </div>
+        </div>
+        <div class="hero-center">
+          <h1>Departamentul de Psihologie</h1>
+          <p>Accesează testul de admitere intern, cu regulile stricte ale departamentului.</p>
+          <div class="hero-actions">
+            <button id="startTestBtn" class="primary">Test Intrare Departament</button>
+            <button class="secondary" disabled>COMING SOON</button>
+          </div>
+        </div>
+      </div>
+      <aside class="hero-sidebar">
+        <div class="sidebar-header">
+          <span>Birou Informativ</span>
+        </div>
+        <div class="sidebar-grid">
+          <a class="sidebar-card" href="https://smurd.rnbhost.cloud/departments/rules/12" target="_blank" rel="noreferrer noopener">
+            <div class="icon">📄</div>
+            <div>
+              <strong>Regulament Intern</strong>
+              <span>Întrebările vin din acest regulament.</span>
+            </div>
+          </a>
+          <a class="sidebar-card" href="https://smurd.rnbhost.cloud/departments/rules/21" target="_blank" rel="noreferrer noopener">
+            <div class="icon">📘</div>
+            <div>
+              <strong>Codul de conduită</strong>
+              <span>Respectul și comportamentul obligatoriu.</span>
+            </div>
+          </a>
+          <a class="sidebar-card" href="https://smurd.rnbhost.cloud/departments/rules/37" target="_blank" rel="noreferrer noopener">
+            <div class="icon">🧠</div>
+            <div>
+              <strong>Situații suicidare</strong>
+              <span>Proceduri sensibile și serioase.</span>
+            </div>
+          </a>
+        </div>
+      </aside>
+    </div>
+
+    <!-- RESULTS TABLE SECTION -->
+    <div class="results-section">
+      <h2>📊 Evidență Rezultate Teste</h2>
+      <div class="results-grid" id="resultsGrid">
+        <div class="result-row header">
+          <div class="result-cell">Nume și Prenume</div>
+          <div class="result-cell">CNP</div>
+          <div class="result-cell">Status</div>
+          <div class="result-cell">Scor</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="decor-lines"></div>
+  </div>
+
+  <div class="page page-rules" id="pageRules">
+    <div class="card">
+      <h2>Regulile testului</h2>
+      <ul>
+        <li>Testul este monitorizat strict și începe de pe acest browser.</li>
+        <li>Schimbarea taburilor, a ferestrei sau deschiderea DevTools poate duce la <strong>FW + blacklist</strong>.</li>
+        <li>Ai <strong>45 de secunde</strong> pe întrebare.</li>
+        <li>Răspunsurile sunt fixe și verificate de conducere.</li>
+        <li>Nu poți reveni la întrebările anterioare.</li>
+      </ul>
+      <div class="card-actions">
+        <button id="confirmStartBtn" class="primary">Începe testul</button>
+        <button id="cancelTestBtn" class="secondary">Renunță</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page page-pre-test" id="pagePreTest">
+    <div class="card">
+      <h2>Date de identificare</h2>
+      <p>Completează datele înainte de a începe testul.</p>
+      <div class="form-group">
+        <label for="preTestName">Nume și Prenume</label>
+        <input type="text" id="preTestName" class="form-input" placeholder="Ion Popescu" />
+      </div>
+      <div class="form-group">
+        <label for="preTestCNP">CNP</label>
+        <input type="text" id="preTestCNP" class="form-input" placeholder="1234567890123" />
+      </div>
+      <div class="card-actions">
+        <button id="preTestNextBtn" class="primary">Continuă</button>
+        <button id="preTestCancelBtn" class="secondary">Renunță</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="page page-test" id="pageTest">
+    <div class="progress-wrap">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+    <div class="topbar">
+      <div class="info"><span id="questionCounter">Pas 1 / 15</span></div>
+      <div class="timer" id="timer">45s</div>
+    </div>
+    <div class="card question-card">
+      <h2 id="questionTitle">Întrebarea va apărea aici</h2>
+      <div class="answers" id="answers"></div>
+    </div>
+    <div class="footer">
+      <button id="nextBtn" class="primary" disabled>Next</button>
+    </div>
+  </div>
+
+  <div class="page page-result" id="pageResult">
+    <div class="card result-card">
+      <div class="result-image" id="resultImage"></div>
+      <h2 id="resultTitle">Rezultatul testului</h2>
+      <p id="resultMessage"></p>
+      <div class="score-panel">
+        <span>Punctaj:</span>
+        <strong id="resultScore">0%</strong>
+      </div>
+      <div class="result-actions">
+        <button id="retryBtn" class="primary">Acasă</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay hidden" id="alertOverlay">
+    <div class="overlay-card">
+      <h3>Atenție</h3>
+      <p id="alertText">Schimbările de tab sau DevTools pot afecta testul.</p>
+      <button id="closeAlertBtn" class="primary">Înțeleg</button>
+    </div>
+  </div>
+
+  <div class="anti-cheat-monitor" id="cheatMonitor"></div>
+
+<script>
+const API_BASE = window.location.origin;
+
+// ===================== RESULTS MANAGEMENT =====================
+function loadAndDisplayResults() {
+  const grid = document.getElementById('resultsGrid');
+  const results = JSON.parse(localStorage.getItem('testResults')) || [];
+  
+  // Keep header
+  const header = grid.querySelector('.result-row.header');
+  grid.innerHTML = '';
+  grid.appendChild(header);
+
+  if (results.length === 0) {
+    grid.innerHTML += '<div class="empty-state"><p>Nu sunt rezultate disponibile.</p></div>';
+    return;
+  }
+
+  // Sort by date descending (newest first)
+  results.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
+  results.forEach(result => {
+    const statusClass = result.passed ? 'passed' : 'failed';
+    const statusText = result.passed ? '✓ Promovat' : '✗ Picat';
+    const row = document.createElement('div');
+    row.className = 'result-row';
+    row.innerHTML = `
+      <div class="result-cell name" data-label="Nume">${result.name}</div>
+      <div class="result-cell cnp" data-label="CNP">${result.cnp}</div>
+      <div class="result-cell status" data-label="Status">
+        <span class="status-badge ${statusClass}">${statusText}</span>
+      </div>
+      <div class="result-cell score" data-label="Scor">${result.score}%</div>
+    `;
+    grid.appendChild(row);
+  });
+}
+
+// ===================== ANTI-CHEAT SYSTEM =====================
+class AntiCheatSystem {
+  constructor() {
+    this.violations = [];
+    this.cheatDetected = false;
+    this.isTestRunning = false;
+    this.lastScreenshot = null;
+    this.tabSwitchCount = 0;
+    this.deviceFingerprint = this.generateFingerprint();
+    this.startMonitoring();
+  }
+
+  generateFingerprint() {
+    return {
+      ua: navigator.userAgent,
+      lang: navigator.language,
+      tz: new Date().getTimezoneOffset(),
+      plugins: navigator.plugins.length,
+      timestamp: Date.now()
+    };
+  }
+
+  logViolation(type, severity = 'high') {
+    const violation = {
+      type,
+      severity,
+      timestamp: new Date().toLocaleString(),
+      count: (this.violations.filter(v => v.type === type).length || 0) + 1
+    };
+    this.violations.push(violation);
+    console.warn(`🚨 VIOLATION DETECTED: ${type} (${severity})`);
+    this.updateMonitor();
+
+    if (this.isTestRunning) {
+      this.sendViolationToServer(violation);
+    }
+  }
+
+  sendViolationToServer(violation) {
+    fetch(`${API_BASE}/api/cheat-log`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        violation: violation.type,
+        severity: violation.severity,
+        timestamp: violation.timestamp,
+        fingerprint: this.deviceFingerprint
+      })
+    }).catch(e => console.log('Log sent'));
+  }
+
+  updateMonitor() {
+    const monitor = document.getElementById('cheatMonitor');
+    if (monitor) {
+      monitor.innerHTML = `
+        🔒 MONITORIZARE ACTIVA<br/>
+        Incalcari: ${this.violations.length}<br/>
+        ${this.violations.slice(-3).map(v => `• ${v.type}`).join('<br/>')}
+      `;
+    }
+  }
+
+  startMonitoring() {
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        this.logViolation('TAB SWITCH DETECTED', 'critical');
+        if (this.isTestRunning) {
+          this.triggerTestFailure('Tab switch detectat. Examen picat.');
+        }
+      }
+    });
+
+    document.addEventListener('fullscreenchange', () => {
+      if (!document.fullscreenElement && this.isTestRunning) {
+        this.logViolation('FULLSCREEN EXIT', 'critical');
+        this.triggerTestFailure('Ai ieșit din fullscreen. Examen picat.');
+      }
+    });
+
+    setInterval(() => {
+      if (!this.isTestRunning) return;
+      const threshold = 160;
+      if (window.outerWidth - window.innerWidth > threshold ||
+          window.outerHeight - window.innerHeight > threshold) {
+        this.logViolation('DEVTOOLS OPENED', 'critical');
+        this.triggerTestFailure('DevTools detectat. Examen picat.');
+      }
+    }, 200);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'PrintScreen' && this.isTestRunning) {
+        e.preventDefault();
+        this.logViolation('PRINT SCREEN ATTEMPT', 'high');
+        this.triggerTestFailure('Screenshot detectat. Examen picat.');
+      }
+
+      const suspiciousShortcuts = { 'F12': true, 'F11': true };
+      if (suspiciousShortcuts[e.key]) {
+        e.preventDefault();
+        this.logViolation(`SHORTCUT BLOCKED: ${e.key}`, 'high');
+      }
+
+      if (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'C' || e.key === 'J')) {
+        e.preventDefault();
+        this.logViolation('DEVTOOLS SHORTCUT BLOCKED', 'high');
+      }
+    });
+
+    document.addEventListener('contextmenu', (e) => {
+      if (this.isTestRunning) {
+        e.preventDefault();
+        this.logViolation('RIGHT CLICK ATTEMPT', 'medium');
+      }
+    });
+
+    document.addEventListener('copy', (e) => {
+      if (this.isTestRunning) {
+        e.preventDefault();
+        this.logViolation('COPY ATTEMPT', 'medium');
+      }
+    });
+
+    document.addEventListener('paste', (e) => {
+      if (this.isTestRunning) {
+        e.preventDefault();
+        this.logViolation('PASTE ATTEMPT', 'medium');
+      }
+    });
+
+    window.addEventListener('blur', () => {
+      if (this.isTestRunning) {
+        this.logViolation('WINDOW BLUR', 'high');
+      }
+    });
+
+    this.setupCanvasProtection();
+    this.checkHeadless();
+  }
+
+  setupCanvasProtection() {
+    const originalToDataURL = HTMLCanvasElement.prototype.toDataURL;
+    HTMLCanvasElement.prototype.toDataURL = function() {
+      if (antiCheat.isTestRunning) {
+        antiCheat.logViolation('CANVAS SCREENSHOT ATTEMPT', 'high');
+        return '';
+      }
+      return originalToDataURL.call(this);
+    };
+  }
+
+  checkHeadless() {
+    if (navigator.webdriver) {
+      this.logViolation('HEADLESS BROWSER DETECTED', 'critical');
+    }
+    if (!navigator.plugins.length) {
+      console.warn('Plugins not available - possible headless browser');
+    }
+  }
+
+  triggerTestFailure(reason) {
+    if (testFailed) return;
+    testFailed = true;
+    securityLock = true;
+    clearInterval(timerInterval);
+    this.sendCheatingReport(reason);
+    endTest(false);
+  }
+
+  sendCheatingReport(reason) {
+    fetch(`${API_BASE}/api/cheating-report`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        user_name: testUserName,
+        user_cnp: testUserCNP,
+        reason: reason,
+        violations: this.violations,
+        fingerprint: this.deviceFingerprint
+      })
+    }).catch(e => console.log('Report sent'));
+  }
+
+  enableTestMode() {
+    this.isTestRunning = true;
+    const monitor = document.getElementById('cheatMonitor');
+    if (monitor) monitor.style.display = 'block';
+  }
+
+  disableTestMode() {
+    this.isTestRunning = false;
+    const monitor = document.getElementById('cheatMonitor');
+    if (monitor) monitor.style.display = 'none';
+  }
+}
+
+const antiCheat = new AntiCheatSystem();
+
+// ===================== TEST SCRIPT =====================
+const questionBank = [
+  { type: 'choice', question: 'Pe ce principiu se bazează toate evaluările și consilierile psihologice?', options: ['Respectarea confidențialității și a respectului reciproc', 'Ignorarea regulilor', 'Judecata personală'], correct: 0 },
+  { type: 'choice', question: 'Ce trebuie să facă un membru al departamentului dacă are un conflict intern?', options: ['Să se adreseze unui superior', 'Să ignor problema', 'Să plece din departament'], correct: 0 },
+  { type: 'choice', question: 'Cine are responsabilitatea de a analiza problemele comportamentale?', options: ['Toti membrii', 'Managerii', 'Supervizorul'], correct: 2 },
+  { type: 'choice', question: 'Care este suma maximă pentru o ședință?', options: ['10.000$', '25.000$', '50.000$'], correct: 2 },
+  { type: 'choice', question: 'Ce sancțiune se aplică normal?', options: ['Avertisment', 'Suspendare', 'Demitere'], correct: 0 },
+  { type: 'choice', question: 'Cât timp se păstrează înregistrările?', options: ['24 ore', '48 ore', '72 ore'], correct: 2 },
+  { type: 'choice', question: 'În cât timp se prezintă dovezile?', options: ['12 ore', '24 ore', '48 ore'], correct: 1 },
+  { type: 'choice', question: 'Ce se întâmplă fără dovezi?', options: ['Avertisment', 'Nimic', 'Excludere'], correct: 0 },
+  { type: 'choice', question: 'Care este termenul adeverinței?', options: ['7 zile', '14 zile', '30 zile'], correct: 1 },
+  { type: 'choice', question: 'După cât timp se reia testul?', options: ['12 ore', '24 ore', '72 ore'], correct: 1 },
+  { type: 'choice', question: 'Ce condiție pentru ședință?', options: ['Grad minim', 'Experiență', 'Vârsta'], correct: 0 },
+  { type: 'choice', question: 'Sancțiune pentru folosire licență?', options: ['AV', 'FW', 'Demitere'], correct: 2 },
+  { type: 'choice', question: 'Frecvență pentru intervenție?', options: ['10', '11', '12'], correct: 1 },
+  { type: 'choice', question: 'Prima etapă de protocol?', options: ['Transport', 'Evaluare', 'Raport'], correct: 1 },
+  { type: 'choice', question: 'Ce comportament interzis?', options: ['Empatie', 'Furie', 'Neatenție'], correct: 2 }
+];
+
+const TOTAL_STEPS = 15;
+let questions = [];
+let currentQuestionIndex = 0;
+let selectedAnswerIndex = null;
+let score = 0;
+let timerValue = 45;
+let timerInterval = null;
+let securityLock = false;
+let testFailed = false;
+let resultSent = false;
+let testUserName = '';
+let testUserCNP = '';
+
+const pageHome = document.getElementById('pageHome');
+const pageRules = document.getElementById('pageRules');
+const pagePreTest = document.getElementById('pagePreTest');
+const pageTest = document.getElementById('pageTest');
+const pageResult = document.getElementById('pageResult');
+const startTestBtn = document.getElementById('startTestBtn');
+const confirmStartBtn = document.getElementById('confirmStartBtn');
+const cancelTestBtn = document.getElementById('cancelTestBtn');
+const preTestNextBtn = document.getElementById('preTestNextBtn');
+const preTestCancelBtn = document.getElementById('preTestCancelBtn');
+const preTestName = document.getElementById('preTestName');
+const preTestCNP = document.getElementById('preTestCNP');
+const nextBtn = document.getElementById('nextBtn');
+const retryBtn = document.getElementById('retryBtn');
+const questionTitle = document.getElementById('questionTitle');
+const answersContainer = document.getElementById('answers');
+const questionCounter = document.getElementById('questionCounter');
+const timerDisplay = document.getElementById('timer');
+const progressFill = document.getElementById('progressFill');
+const resultTitle = document.getElementById('resultTitle');
+const resultMessage = document.getElementById('resultMessage');
+const resultScore = document.getElementById('resultScore');
+const resultImage = document.getElementById('resultImage');
+const alertOverlay = document.getElementById('alertOverlay');
+const alertText = document.getElementById('alertText');
+const closeAlertBtn = document.getElementById('closeAlertBtn');
+
+function exitFullscreenMode() {
+  if (document.fullscreenElement) {
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+}
+
+function switchPage(activePage) {
+  const leavingTest = !activePage.classList.contains('page-test');
+  if (leavingTest) {
+    exitFullscreenMode();
+  }
+
+  [pageHome, pageRules, pagePreTest, pageTest, pageResult].forEach(page => page.classList.remove('active'));
+  activePage.classList.add('active');
+}
+
+function shuffle(array) {
+  return array.slice().sort(() => Math.random() - 0.5);
+}
+
+function buildQuestionSet() {
+  return shuffle(questionBank).slice(0, 15);
+}
+
+function updateTimerBar() {
+  const progress = Math.max((timerValue / 45) * 100, 0);
+  progressFill.style.width = `${progress}%`;
+}
+
+function displayQuestion() {
+  if (currentQuestionIndex >= questions.length) {
+    endTest(true);
+    return;
+  }
+
+  const question = questions[currentQuestionIndex];
+  questionTitle.textContent = question.question;
+  answersContainer.innerHTML = '';
+  selectedAnswerIndex = null;
+  nextBtn.disabled = true;
+
+  question.options.forEach((option, index) => {
+    const button = document.createElement('button');
+    button.className = 'answer-option';
+    button.textContent = option;
+    button.onclick = () => selectAnswer(index);
+    answersContainer.appendChild(button);
+  });
+
+  updateTimerBar();
+  questionCounter.textContent = `Pas ${currentQuestionIndex + 1} / ${TOTAL_STEPS}`;
+}
+
+function selectAnswer(index) {
+  if (securityLock) return;
+
+  selectedAnswerIndex = index;
+  const options = document.querySelectorAll('.answer-option');
+  options.forEach((opt, i) => {
+    opt.classList.toggle('selected', i === index);
+  });
+
+  nextBtn.disabled = false;
+}
+
+function startTimer() {
+  timerValue = 45;
+  timerDisplay.textContent = '45s';
+  clearInterval(timerInterval);
+
+  timerInterval = setInterval(() => {
+    timerValue--;
+    timerDisplay.textContent = `${timerValue}s`;
+    updateTimerBar();
+
+    if (timerValue <= 0) {
+      clearInterval(timerInterval);
+      moveToNextQuestion();
+    }
+  }, 1000);
+}
+
+function moveToNextQuestion() {
+  if (securityLock) return;
+
+  if (selectedAnswerIndex !== null) {
+    const question = questions[currentQuestionIndex];
+    if (selectedAnswerIndex === question.correct) {
+      score++;
+    }
+  }
+
+  currentQuestionIndex++;
+  clearInterval(timerInterval);
+
+  if (currentQuestionIndex >= questions.length) {
+    endTest(true);
+  } else {
+    displayQuestion();
+    startTimer();
+  }
+}
+
+function endTest(passed) {
+  antiCheat.disableTestMode();
+  clearInterval(timerInterval);
+  securityLock = true;
+
+  const percentage = Math.round((score / TOTAL_STEPS) * 100);
+  const passing = percentage >= 60;
+
+  resultTitle.textContent = passing ? '✅ Felicitări!' : '❌ Test Nereușit';
+  resultMessage.textContent = passing 
+    ? `Ai promovat testul cu ${percentage}%! Te-ai calificat pentru departament.`
+    : `Din păcate, ai picat testul cu ${percentage}%. Scor minim: 60%`;
+  resultScore.textContent = `${percentage}%`;
+
+  if (!resultSent && testUserName && testUserCNP) {
+    resultSent = true;
+    const result = {
+      name: testUserName,
+      cnp: testUserCNP,
+      score: percentage,
+      passed: passing,
+      timestamp: new Date().toISOString()
+    };
+
+    // Save to localStorage
+    const results = JSON.parse(localStorage.getItem('testResults')) || [];
+    results.push(result);
+    localStorage.setItem('testResults', JSON.stringify(results));
+
+    // Send to server
+    fetch(`${API_BASE}/api/test-result`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(result)
+    }).catch(e => console.log('Result sent'));
+  }
+
+  switchPage(pageResult);
+}
+
+// EVENT LISTENERS
+startTestBtn.addEventListener('click', () => {
+  switchPage(pageRules);
+});
+
+confirmStartBtn.addEventListener('click', () => {
+  switchPage(pagePreTest);
+});
+
+cancelTestBtn.addEventListener('click', () => {
+  switchPage(pageHome);
+});
+
+preTestNextBtn.addEventListener('click', () => {
+  const name = preTestName.value.trim();
+  const cnp = preTestCNP.value.trim();
+
+  if (!name || !cnp) {
+    alert('Completează toate câmpurile!');
+    return;
+  }
+
+  testUserName = name;
+  testUserCNP = cnp;
+
+  questions = buildQuestionSet();
+  currentQuestionIndex = 0;
+  score = 0;
+  selectedAnswerIndex = null;
+  testFailed = false;
+  resultSent = false;
+
+  antiCheat.enableTestMode();
+  switchPage(pageTest);
+
+  setTimeout(() => {
+    displayQuestion();
+    startTimer();
+  }, 100);
+});
+
+preTestCancelBtn.addEventListener('click', () => {
+  preTestName.value = '';
+  preTestCNP.value = '';
+  switchPage(pageHome);
+});
+
+nextBtn.addEventListener('click', moveToNextQuestion);
+
+retryBtn.addEventListener('click', () => {
+  preTestName.value = '';
+  preTestCNP.value = '';
+  antiCheat.disableTestMode();
+  loadAndDisplayResults();
+  switchPage(pageHome);
+});
+
+closeAlertBtn.addEventListener('click', () => {
+  alertOverlay.classList.add('hidden');
+});
+
+// Load results on page load
+window.addEventListener('load', () => {
+  loadAndDisplayResults();
+});
+</script>
+</body>
+</html>
