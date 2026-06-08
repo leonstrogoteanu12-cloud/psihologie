@@ -4,13 +4,13 @@ const questionBank = [
   { 
     type: 'choice', 
     question: 'Pe ce principiu se bazează toate evaluările și consilierile psihologice?', 
-    options: ['Respectarea confidențialității și a respectului reciproc', 'Respectarea ordinelor superiorilor indiferent de situație', 'Protejarea intereselor departamentului înaintea pacient[...]
+    options: ['Respectarea confidențialității și a respectului reciproc', 'Respectarea ordinelor superiorilor indiferent de situație', 'Protejarea intereselor departamentului înaintea pacientului', 'Păstrarea informațiilor doar în cadrul conducerii'], 
     correct: 0 
   },
   { 
     type: 'choice', 
     question: 'Ce trebuie să facă un membru al departamentului dacă are un conflict intern?', 
-    options: ['Să se adreseze unui Director Adjunct SMURD', 'Să urmeze scara ierarhică a Departamentului de Psihologie', 'Să contacteze un Supervizor din HR', 'Să raporteze direct situația u[...]
+    options: ['Să se adreseze unui Director Adjunct SMURD', 'Să urmeze scara ierarhică a Departamentului de Psihologie', 'Să contacteze un Supervizor din HR', 'Să raporteze direct situația unui Director General'], 
     correct: 1 
   },
   { 
@@ -88,7 +88,7 @@ const questionBank = [
   { 
     type: 'choice', 
     question: 'Care dintre următoarele comportamente este interzis în timpul unei intervenții suicidare?', 
-    options: ['Folosirea unui ton calm și empatic', 'Adresarea pacientului pe nume', 'Ridicarea vocii și folosirea unui ton autoritar', 'Încurajarea pacientului să vorbească despre situație'[...]
+    options: ['Folosirea unui ton calm și empatic', 'Adresarea pacientului pe nume', 'Ridicarea vocii și folosirea unui ton autoritar', 'Încurajarea pacientului să vorbească despre situație'], 
     correct: 2 
   },
 ];
@@ -424,7 +424,7 @@ preTestNextBtn.addEventListener('click', () => {
   testUserName = name;
   testUserCNP = cnp;
   
-  // ACTIVEAZĂ FULLSCREEN AUTOMAT ÎNAINTE DE A INCEPE TESTUL
+  // FORȚEAZĂ FULLSCREEN ÎN MOMENTUL ÎNCEPERII TESTULUI
   requestFullscreenMode().then(() => {
     startTest();
   }).catch(() => {
