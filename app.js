@@ -105,7 +105,7 @@ let testFailed = false;
 let resultSent = false;
 let testUserName = '';
 let testUserCNP = '';
-let isInFullscreen = false;
+let testActive = false;
 
 const pageHome = document.getElementById('pageHome');
 const pageRules = document.getElementById('pageRules');
@@ -146,7 +146,7 @@ function exitFullscreenMode() {
 
 function switchPage(activePage) {
   const leavingTest = !activePage.classList.contains('page-test');
-  if (leavingTest) {
+  if (leavingTest && !testActive) {
     exitFullscreenMode();
   }
 
@@ -302,6 +302,7 @@ async function postTestResultToDiscord(passed, percentage) {
 function endTest(passed) {
   if (resultSent) return;
   resultSent = true;
+  testActive = false;
   clearInterval(timerInterval);
   const percentage = Math.round((score / 15) * 100);
   const success = passed && percentage >= 80;
@@ -333,23 +334,26 @@ function hideAlert() {
 function requestFullscreenMode() {
   const docEl = document.documentElement;
   if (docEl.requestFullscreen) {
-    return docEl.requestFullscreen();
+    return docEl.requestFullscreen().catch(err => Promise.reject(err));
   }
   if (docEl.webkitRequestFullscreen) {
     return docEl.webkitRequestFullscreen();
   }
-  return Promise.resolve();
+  return Promise.reject(new Error('Fullscreen not supported'));
 }
 
 function failTest(reason) {
   if (securityLock) return;
   securityLock = true;
   testFailed = true;
+  testActive = false;
   clearInterval(timerInterval);
   endTest(false);
 }
 
 function checkForFraud() {
+  if (!testActive) return;
+
   if (document.hidden) {
     failTest('Schimbarea tab-ului detectata. Examen picat.');
     return;
@@ -375,6 +379,7 @@ function protectNavigation() {
 }
 
 function startTest() {
+  testActive = true;
   questions = buildQuestionSet();
   
   // Randomizează variantele pentru fiecare întrebare
@@ -421,14 +426,23 @@ preTestNextBtn.addEventListener('click', () => {
   testUserName = name;
   testUserCNP = cnp;
   
-  // FORȚEAZĂ FULLSCREEN STRICT - NU PORNIM TESTUL DACĂ NU REUȘIM
-  requestFullscreenMode().then(() => {
-    isInFullscreen = true;
-    startTest();
-  }).catch((error) => {
-    console.error('Fullscreen eșuat:', error);
-    showAlert('Fullscreen este obligatoriu pentru a putea incepe testul. Te rog incearca din nou.');
-  });
+  // INTRA AUTOMAT IN FULLSCREEN INAINTE DE TEST
+  const attemptFullscreen = () => {
+    requestFullscreenMode()
+      .then(() => {
+        console.log('Fullscreen activat cu succes');
+        // Asteapta un pic sa se activeze fullscreen-ul complet
+        setTimeout(() => {
+          startTest();
+        }, 500);
+      })
+      .catch((error) => {
+        console.error('Fullscreen failed:', error);
+        showAlert('Fullscreen este obligatoriu. Te rog sa accepti cererea de fullscreen.');
+      });
+  };
+  
+  attemptFullscreen();
 });
 
 preTestCancelBtn.addEventListener('click', () => {
@@ -440,6 +454,7 @@ preTestCancelBtn.addEventListener('click', () => {
 nextBtn.addEventListener('click', () => goToNextQuestion());
 
 retryBtn.addEventListener('click', () => {
+  testActive = false;
   switchPage(pageHome);
   preTestName.value = '';
   preTestCNP.value = '';
@@ -450,26 +465,26 @@ closeAlertBtn.addEventListener('click', () => {
 });
 
 document.addEventListener('keydown', (event) => {
-  if (['F12', 'I', 'J', 'U'].includes(event.key.toUpperCase()) && (event.ctrlKey || event.metaKey || event.shiftKey)) {
+  if (testActive && ['F12', 'I', 'J', 'U'].includes(event.key.toUpperCase()) && (event.ctrlKey || event.metaKey || event.shiftKey)) {
     event.preventDefault();
     failTest('DevTools forbiden. Examen picat.');
   }
 });
 
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && pageTest.classList.contains('active')) {
+  if (document.hidden && testActive) {
     failTest('Tab-change detectat. Examen picat.');
   }
 });
 
 document.addEventListener('fullscreenchange', () => {
-  if (!document.fullscreenElement && pageTest.classList.contains('active')) {
+  if (!document.fullscreenElement && testActive) {
     failTest('Full screen pierdut. Examen picat.');
   }
 });
 
 window.addEventListener('beforeunload', (event) => {
-  if (pageTest.classList.contains('active')) {
+  if (testActive) {
     event.preventDefault();
     event.returnValue = '';
   }
