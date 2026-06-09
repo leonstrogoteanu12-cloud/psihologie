@@ -4,13 +4,13 @@ const questionBank = [
   { 
     type: 'choice', 
     question: 'Pe ce principiu se bazează toate evaluările și consilierile psihologice?', 
-    options: ['Respectarea confidențialității și a respectului reciproc', 'Respectarea ordinelor superiorilor indiferent de situație', 'Protejarea intereselor departamentului înaintea pacient[...]
+    options: ['Respectarea confidențialității și a respectului reciproc', 'Respectarea ordinelor superiorilor indiferent de situație', 'Protejarea intereselor departamentului înaintea pacientului', 'Păstrarea informațiilor doar în cadrul conducerii'], 
     correct: 0 
   },
   { 
     type: 'choice', 
     question: 'Ce trebuie să facă un membru al departamentului dacă are un conflict intern?', 
-    options: ['Să se adreseze unui Director Adjunct SMURD', 'Să urmeze scara ierarhică a Departamentului de Psihologie', 'Să contacteze un Supervizor din HR', 'Să raporteze direct situația u[...]
+    options: ['Să se adreseze unui Director Adjunct SMURD', 'Să urmeze scara ierarhică a Departamentului de Psihologie', 'Să contacteze un Supervizor din HR', 'Să raporteze direct situația unui Director General'], 
     correct: 1 
   },
   { 
@@ -57,7 +57,7 @@ const questionBank = [
   },
   { 
     type: 'choice', 
-    question: 'După cât timp poate fi reluată o ședință cu statusul „Picat"?', 
+    question: 'După cât timp poate fi reluată o ședință cu statusul "Picat"?', 
     options: ['12 ore', '24 ore', '48 ore', '72 ore'], 
     correct: 1 
   },
@@ -88,7 +88,7 @@ const questionBank = [
   { 
     type: 'choice', 
     question: 'Care dintre următoarele comportamente este interzis în timpul unei intervenții suicidare?', 
-    options: ['Folosirea unui ton calm și empatic', 'Adresarea pacientului pe nume', 'Ridicarea vocii și folosirea unui ton autoritar', 'Încurajarea pacientului să vorbească despre situație[...]
+    options: ['Folosirea unui ton calm și empatic', 'Adresarea pacientului pe nume', 'Ridicarea vocii și folosirea unui ton autoritar', 'Încurajarea pacientului să vorbească despre situație'], 
     correct: 2 
   },
 ];
@@ -107,7 +107,7 @@ let testUserName = '';
 let testUserCNP = '';
 let testActive = false;
 let fullscreenAttempts = 0;
-const MAX_FULLSCREEN_ATTEMPTS = 3;
+const MAX_FULLSCREEN_ATTEMPTS = 5;
 
 const pageHome = document.getElementById('pageHome');
 const pageRules = document.getElementById('pageRules');
@@ -441,24 +441,38 @@ preTestNextBtn.addEventListener('click', () => {
   testUserName = name;
   testUserCNP = cnp;
   
-  // INTRA AUTOMAT IN FULLSCREEN INAINTE DE TEST
+  // INTRA AUTOMAT IN FULLSCREEN INAINTE DE TEST - VERSIUNE IMBUNATATITA
   const attemptFullscreen = () => {
     fullscreenAttempts++;
+    console.log(`Fullscreen attempt ${fullscreenAttempts}/${MAX_FULLSCREEN_ATTEMPTS}`);
+    
     requestFullscreenMode()
       .then(() => {
-        console.log('Fullscreen activat cu succes');
-        // Asteapta un pic sa se activeze fullscreen-ul complet
+        console.log('✓ Fullscreen activat cu succes');
+        showAlert('Fullscreen activat. Testul incepe...');
+        
+        // Asteapta sa se activeze fullscreen-ul complet
         setTimeout(() => {
+          hideAlert();
           startTest();
-        }, 800);
+        }, 1200);
       })
       .catch((error) => {
-        console.error('Fullscreen failed attempt', fullscreenAttempts, error);
+        console.error(`✗ Fullscreen failed attempt ${fullscreenAttempts}:`, error.message);
+        
         if (fullscreenAttempts < MAX_FULLSCREEN_ATTEMPTS) {
-          // Incearca din nou dupa 500ms
-          setTimeout(attemptFullscreen, 500);
+          // Incearca din nou dupa 1 secunda
+          showAlert(`Incercare ${fullscreenAttempts}/${MAX_FULLSCREEN_ATTEMPTS}... Asteapta...`);
+          setTimeout(attemptFullscreen, 1000);
         } else {
-          showAlert('Fullscreen este obligatoriu. Te rog sa accepti cererea de fullscreen.');
+          // Dupa maxim incercari, ofera optiuni alternative
+          showAlert(
+            'Fullscreen nu a putut fi activat după mai multe încercări.\n\n' +
+            'Soluții:\n' +
+            '1. Accepta permisiunea de fullscreen din browser\n' +
+            '2. Verifica daca nu ai restrictii de securitate\n' +
+            '3. Incearca din nou sau schimba browserul'
+          );
           fullscreenAttempts = 0;
         }
       });
