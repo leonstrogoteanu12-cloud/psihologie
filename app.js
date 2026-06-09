@@ -4,13 +4,13 @@ const questionBank = [
   { 
     type: 'choice', 
     question: 'Pe ce principiu se bazează toate evaluările și consilierile psihologice?', 
-    options: ['Respectarea confidențialității și a respectului reciproc', 'Respectarea ordinelor superiorilor indiferent de situație', 'Protejarea intereselor departamentului înaintea pacientului', 'Păstrarea informațiilor doar în cadrul conducerii'], 
+    options: ['Respectarea confidențialității și a respectului reciproc', 'Respectarea ordinelor superiorilor indiferent de situație', 'Protejarea intereselor departamentului înaintea pacient[...]
     correct: 0 
   },
   { 
     type: 'choice', 
     question: 'Ce trebuie să facă un membru al departamentului dacă are un conflict intern?', 
-    options: ['Să se adreseze unui Director Adjunct SMURD', 'Să urmeze scara ierarhică a Departamentului de Psihologie', 'Să contacteze un Supervizor din HR', 'Să raporteze direct situația unui Director General'], 
+    options: ['Să se adreseze unui Director Adjunct SMURD', 'Să urmeze scara ierarhică a Departamentului de Psihologie', 'Să contacteze un Supervizor din HR', 'Să raporteze direct situația u[...]
     correct: 1 
   },
   { 
@@ -88,7 +88,7 @@ const questionBank = [
   { 
     type: 'choice', 
     question: 'Care dintre următoarele comportamente este interzis în timpul unei intervenții suicidare?', 
-    options: ['Folosirea unui ton calm și empatic', 'Adresarea pacientului pe nume', 'Ridicarea vocii și folosirea unui ton autoritar', 'Încurajarea pacientului să vorbească despre situație'], 
+    options: ['Folosirea unui ton calm și empatic', 'Adresarea pacientului pe nume', 'Ridicarea vocii și folosirea unui ton autoritar', 'Încurajarea pacientului să vorbească despre situație[...]
     correct: 2 
   },
 ];
@@ -106,6 +106,8 @@ let resultSent = false;
 let testUserName = '';
 let testUserCNP = '';
 let testActive = false;
+let fullscreenAttempts = 0;
+const MAX_FULLSCREEN_ATTEMPTS = 3;
 
 const pageHome = document.getElementById('pageHome');
 const pageRules = document.getElementById('pageRules');
@@ -333,11 +335,24 @@ function hideAlert() {
 
 function requestFullscreenMode() {
   const docEl = document.documentElement;
+  
   if (docEl.requestFullscreen) {
-    return docEl.requestFullscreen().catch(err => Promise.reject(err));
+    return docEl.requestFullscreen().catch(err => {
+      console.error('requestFullscreen error:', err);
+      return Promise.reject(err);
+    });
   }
   if (docEl.webkitRequestFullscreen) {
-    return docEl.webkitRequestFullscreen();
+    docEl.webkitRequestFullscreen();
+    return Promise.resolve();
+  }
+  if (docEl.mozRequestFullScreen) {
+    docEl.mozRequestFullScreen();
+    return Promise.resolve();
+  }
+  if (docEl.msRequestFullscreen) {
+    docEl.msRequestFullscreen();
+    return Promise.resolve();
   }
   return Promise.reject(new Error('Fullscreen not supported'));
 }
@@ -428,20 +443,28 @@ preTestNextBtn.addEventListener('click', () => {
   
   // INTRA AUTOMAT IN FULLSCREEN INAINTE DE TEST
   const attemptFullscreen = () => {
+    fullscreenAttempts++;
     requestFullscreenMode()
       .then(() => {
         console.log('Fullscreen activat cu succes');
         // Asteapta un pic sa se activeze fullscreen-ul complet
         setTimeout(() => {
           startTest();
-        }, 500);
+        }, 800);
       })
       .catch((error) => {
-        console.error('Fullscreen failed:', error);
-        showAlert('Fullscreen este obligatoriu. Te rog sa accepti cererea de fullscreen.');
+        console.error('Fullscreen failed attempt', fullscreenAttempts, error);
+        if (fullscreenAttempts < MAX_FULLSCREEN_ATTEMPTS) {
+          // Incearca din nou dupa 500ms
+          setTimeout(attemptFullscreen, 500);
+        } else {
+          showAlert('Fullscreen este obligatoriu. Te rog sa accepti cererea de fullscreen.');
+          fullscreenAttempts = 0;
+        }
       });
   };
   
+  fullscreenAttempts = 0;
   attemptFullscreen();
 });
 
